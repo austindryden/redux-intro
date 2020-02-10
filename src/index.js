@@ -87,12 +87,12 @@ function counter(state={amount: 100}, action){
     // } else {
     //     //pass. Just return the unmodified copy of state in newState.
     // }
-    //they MUST return the new version of state.
+    // they MUST return the new version of state.
     return newState;
 }
 // you give it a reducer, you give it a "store"
 // the store is an object that manages your state using your reducer
-const store = createStore(counter);
+const store = createStore(counter, window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__());
 
 store.subscribe(() => {
     console.log(`the state is now:`);

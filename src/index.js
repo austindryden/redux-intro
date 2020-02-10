@@ -17,20 +17,20 @@ const DEL_COUNTER = 'DEL_COUNTER';
 //write action creator funtions. They format your action object, to avoid bug via typo.
 // ReactDOM.render(<App />, document.getElementById('root'));
 
-function actionIncrement(amount=1, target='amount'){
-    return {type:INCREMENT, amount, target}
+function actionIncrement(amount=1, id=0){
+    return {type:INCREMENT, amount, id}
 }
 
-function actionDecrement(amount=1, target='amount'){
-    return {type:DECREMENT, amount, target}
+function actionDecrement(amount=1, id=0){
+    return {type:DECREMENT, amount, id}
 }
 
-function actionAdd(name, init=0){
-    return {type:ADD_COUNTER, name, init};
+function actionAdd(){
+    return {type:ADD_COUNTER};
 }
 
-function actionDel(name){
-    return {type:ADD_COUNTER,name};
+function actionDel(id){
+    return {type:DEL_COUNTER,id};
 }
 // // If you want your app to work offline and load faster, you can change
 // // unregister() to register() below. Note this comes with some pitfalls.
@@ -62,20 +62,25 @@ function actionDel(name){
 // "the teller" - reducer funtion
 // reducers are always named for the state they manage.
 // they always recieve the current state and the action they are processing
-function counter(state={amount: 100}, action){
+function counter(state = {amount: [0]}, action){
     console.log("inside of counter function");
     
     const newState = {...state};
 
     switch(action.type){
         case INCREMENT:
-            newState[action.target] = newState[action.target] + action.amount; break;
+            console.log("increment");
+            newState.amount[action.id] = newState.amount[action.id] + action.amount; break;
         case DECREMENT:
-            newState[action.target] = newState[action.target] - action.amount; break;
+            console.log("decrement");
+            newState.amount[action.id] = newState.amount[action.id] - action.amount; break;
         case ADD_COUNTER:
-            newState[action.name] = action.init; break;
+            console.log("add");
+            newState.amount.push(0);
+            break;
         case DEL_COUNTER:
-                delete newState[action.name]; break;
+            console.log("del");
+                newState.amount.splice(action.id, 1); break;
         default:
             break;
     }
@@ -100,17 +105,17 @@ store.subscribe(() => {
 });
 // lets give the store some actions to process.
 
-store.dispatch(actionAdd('second', 50));
+store.dispatch(actionAdd());
 store.dispatch(actionIncrement(5));
 store.dispatch(actionIncrement());
 store.dispatch(actionIncrement());
-store.dispatch(actionIncrement(20, 'second'));
+store.dispatch(actionIncrement(20));
 store.dispatch(actionDecrement(5));
 store.dispatch(actionDecrement());
 store.dispatch(actionDecrement(22));
-store.dispatch(actionAdd('third', 50));
-store.dispatch(actionAdd('anothercounter'));
-store.dispatch(actionDel('busted'));
-store.dispatch(actionDel('second'));
+store.dispatch(actionAdd());
+store.dispatch(actionAdd());
+store.dispatch(actionDel(2));
+store.dispatch(actionDel(1));
 
 //"push notifications" - subscribe to changes in store
